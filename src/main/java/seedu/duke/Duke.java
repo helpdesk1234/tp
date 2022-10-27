@@ -77,7 +77,8 @@ public class Duke {
                 default:
                     break;
                 }
-            } catch (InvalidUserCommandException | InvalidModuleException | ModuleNotFoundException e) {
+            } catch (InvalidUserCommandException | InvalidModuleException
+                     | ModuleNotFoundException | UniversityNotFoundException e) {
                 Ui.printExceptionMessage(e);
             }
         }
@@ -142,11 +143,17 @@ public class Duke {
      * @param createCommand The create command to be executed
      */
     private static void executeCreateCommand(UserUniversityListManager userUniversityListManager,
-                                             TimetableManager timetableManager, CreateCommand createCommand) {
-        userUniversityListManager.createList(createCommand.getUniversityName());
-        timetableManager.createTimetable(createCommand.getUniversityName(), false);
-        UserStorageParser.storeCreatedLists(userUniversityListManager);
-        UserStorageParser.storeTimetable(timetableManager);
+                                             TimetableManager timetableManager, CreateCommand createCommand) throws
+            UniversityNotFoundException {
+        if (Database.hasUniversityInDatabase(createCommand.getUniversityName())) {
+            userUniversityListManager.createList(createCommand.getUniversityName());
+            timetableManager.createTimetable(createCommand.getUniversityName(), false);
+            UserStorageParser.storeCreatedLists(userUniversityListManager);
+            UserStorageParser.storeTimetable(timetableManager);
+        } else {
+            throw new UniversityNotFoundException("Error! " + createCommand.getUniversityName() + " does not exist "
+                    + "in database!");
+        }
     }
 
     /**
