@@ -158,8 +158,8 @@ public class Duke {
             String viewOption = viewCommand.getViewOption();
             if (viewOption.equals("LISTS")) {
                 userUniversityListManager.displayAll();
-            } else if (viewOption.equals("DELETE_HISTORY")) {
-                userUniversityListManager.getUserDeletedModules().displayAll();
+            } else if (viewOption.equals("DELETE HISTORY")) {
+                UserDeletedModules.displayAll();
             } else if (viewOption.equals("UNIVERSITY")) {
                 userUniversityListManager.displayUniversity(viewCommand.getUniversityName());
                 timetableManager.printTimetable(viewCommand.getUniversityName());
