@@ -178,4 +178,18 @@ public class Timetable {
         userTimetable.get(oldLesson.getDay()).remove(oldLesson);
         System.out.print(Ui.printLessonDeletedAcknowledgement(oldLesson));
     }
+
+    public void deleteLessonByCode(String moduleCode) {
+        HashMap<String, ArrayList<Lesson>> updatedUserTimetable = new HashMap<>();
+        for (HashMap.Entry<String, ArrayList<Lesson>> dayAndLessons : userTimetable.entrySet()) {
+            ArrayList<Lesson> updatedLessons = new ArrayList<>();
+            for (Lesson lesson : dayAndLessons.getValue()) {
+                if (!lesson.getCode().equals(moduleCode)) {
+                    updatedLessons.add(lesson);
+                }
+            }
+            updatedUserTimetable.put(dayAndLessons.getKey(),updatedLessons);
+        }
+        userTimetable = updatedUserTimetable;
+    }
 }

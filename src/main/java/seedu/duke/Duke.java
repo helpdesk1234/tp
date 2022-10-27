@@ -11,19 +11,21 @@ import seedu.duke.command.FavouriteCommand;
 import seedu.duke.command.DatabaseStorage;
 import seedu.duke.command.ListCommand;
 import seedu.duke.command.ViewCommand;
+import seedu.duke.exceptions.ModuleNotFoundException;
+import seedu.duke.exceptions.InvalidUserCommandException;
+import seedu.duke.exceptions.InvalidModuleException;
+import seedu.duke.exceptions.TimetableNotFoundException;
+import seedu.duke.exceptions.InvalidUniversityException;
+import seedu.duke.exceptions.UniversityNotFoundException;
 import seedu.duke.timetable.Lesson;
 import seedu.duke.command.Database;
-import seedu.duke.exceptions.InvalidModuleException;
-import seedu.duke.exceptions.InvalidUserCommandException;
-import seedu.duke.exceptions.ModuleNotFoundException;
-import seedu.duke.exceptions.TimetableNotFoundException;
-import seedu.duke.exceptions.UniversityNotFoundException;
 import seedu.duke.module.Module;
 import seedu.duke.parser.CommandParser;
 import seedu.duke.timetable.TimetableManager;
 import seedu.duke.ui.Ui;
 import seedu.duke.module.ModuleMapping;
 import seedu.duke.university.University;
+import seedu.duke.user.UserDeletedModules;
 import seedu.duke.user.UserModuleMapping;
 import seedu.duke.user.UserUniversityListManager;
 import seedu.duke.parser.UserStorageParser;
@@ -120,8 +122,10 @@ public class Duke {
                 } else {
                     userUniversityListManager.deleteModule(deleteCommand.getUniversityName(),
                             deleteCommand.getModuleCode());
-                    UserStorageParser.storeTimetable(timetableManager);
+                    timetableManager.getTimetableByUniversityName(deleteCommand.getUniversityName())
+                            .deleteLessonByCode(deleteCommand.getModuleCode());
                 }
+                UserStorageParser.storeTimetable(timetableManager);
                 UserStorageParser.storeCreatedLists(userUniversityListManager);
             }
         } catch (NoSuchElementException | TimetableNotFoundException e) {
